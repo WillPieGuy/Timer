@@ -13,7 +13,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
             <Timer className="w-6 h-6" />
-            CountdownHub
+            LiveCountdownTimer.com
           </Link>
 
           <div className="relative">
