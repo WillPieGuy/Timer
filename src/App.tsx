@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import TimerPage from './pages/TimerPage';
 import CreateTimer from './pages/CreateTimer';
 import Profile from './pages/Profile';
+import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './context/AuthContext';
 
@@ -23,6 +24,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </main>
+          <Footer />
           <AuthModal />
         </div>
       </BrowserRouter>
