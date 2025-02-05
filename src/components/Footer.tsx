@@ -11,10 +11,7 @@ export default function Navbar() {
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
-            <Timer className="w-6 h-6" />
-            LiveCountdownTimer.com
-          </Link>
+
 
           <div className="relative">
             {user ? (
@@ -45,6 +42,11 @@ export default function Navbar() {
                     >
                       About Us
                     </button>
+
+                    <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+            <Timer className="w-6 h-6" />
+            LiveCountdownTimer.com
+          </Link>
                   </div>
                 )}
               </>
