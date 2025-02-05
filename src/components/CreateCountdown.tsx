@@ -21,6 +21,7 @@ export function CreateCountdown() {
     const { error } = await supabase
       .from('countdowns')
       .insert({
+        id: title, // Use the title as the ID
         title,
         target_time: targetDateTime,
         timezone,
