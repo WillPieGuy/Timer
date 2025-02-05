@@ -107,12 +107,7 @@ export default function AuthModal() {
           <button
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-blue-600 hover:text-blue-700 font-semibold"
-          ><Link
-          to="/forgot-password"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
-        >
-          Forgot your password?
-        </Link>
+          >
             {isSignUp ? 'Sign In' : 'Sign Up'}
           </button>
         </p>
