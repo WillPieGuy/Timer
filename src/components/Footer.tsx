@@ -11,6 +11,25 @@ export default function Navbar() {
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+            <Timer className="w-6 h-6" />
+            LiveCountdownTimer.com
+          </Link>
+
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+            
+            About
+          </Link>
+
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+            
+            Privacy Policy
+          </Link>
+
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+            
+            Contact Us
+          </Link>
 
 
           <div className="relative">
@@ -40,13 +59,8 @@ export default function Navbar() {
                       }}
                       className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50"
                     >
-                      About Us
+                      Sign Out
                     </button>
-
-                    <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
-            <Timer className="w-6 h-6" />
-            LiveCountdownTimer.com
-          </Link>
                   </div>
                 )}
               </>
@@ -55,7 +69,7 @@ export default function Navbar() {
                 onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
                 className="text-blue-600 hover:text-blue-700 font-semibold"
               >
-                About Us
+                Conact
               </button>
             )}
           </div>
