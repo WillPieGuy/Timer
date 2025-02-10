@@ -16,7 +16,7 @@ export default function Navbar() {
             LiveCountdownTimer.com
           </Link>
 
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+          <Link to="/about" className="flex items-center gap-2 text-xl font-bold text-blue-600">
             
             About
           </Link>
