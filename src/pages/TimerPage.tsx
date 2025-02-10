@@ -9,6 +9,7 @@ export default function TimerPage() {
   const [timer, setTimer] = useState<Timer | null>(null);
   const [creator, setCreator] = useState<Profile | null>(null);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchTimer = async () => {
@@ -45,6 +46,10 @@ export default function TimerPage() {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+
+    // Hide message after 3 seconds
+    setTimeout(() => setCopied(false), 3000);
   };
 
   if (error) {
@@ -90,6 +95,10 @@ export default function TimerPage() {
               Share
             </button>
           </div>
+
+          {copied && (
+            <p className="text-2xl font-bold text-green-600 text-center">Link Copied!</p>
+          )}
 
           <div className="text-sm text-gray-600">
             <p>Created: {new Date(timer.created_at).toLocaleDateString()}</p>

@@ -34,7 +34,7 @@ export default function Navbar() {
                       className="block px-4 py-2 text-gray-700 hover:bg-blue-50"
                       onClick={() => setShowDropdown(false)}
                     >
-                      Profile
+                      My Timers
                     </Link>
                     <button
                       onClick={() => {
