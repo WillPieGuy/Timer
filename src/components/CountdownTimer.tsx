@@ -24,13 +24,22 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
         return;
       }
 
-      const seconds = Math.floor(diff / 1000);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
       const milliseconds = (diff % 1000).toString().padStart(3, '0');
 
-      setTimeLeft(`${seconds}.${milliseconds}s`);
+      let formattedTime = '';
+      if (days > 0) formattedTime += `${days}d `;
+      if (hours > 0 || days > 0) formattedTime += `${hours}h `;
+      if (minutes > 0 || hours > 0 || days > 0) formattedTime += `${minutes}m `;
+      formattedTime += `${seconds}.${milliseconds}s`;
+
+      setTimeLeft(formattedTime.trim());
     };
 
-    updateTimer(); // Update immediately on mount
+    updateTimer(); // Initial update
 
     const interval = setInterval(updateTimer, 10); // Update every 10ms
 
