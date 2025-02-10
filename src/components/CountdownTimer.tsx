@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { formatDistanceToNow } from 'date-fns';
 import { Timer as TimerIcon } from 'lucide-react';
 import type { Timer } from '../lib/supabase';
 
@@ -13,19 +12,27 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const endTime = new Date(timer.end_time);
-      const now = new Date();
+    const updateTimer = () => {
+      const endTime = new Date(timer.end_time).getTime();
+      const now = Date.now();
+      const diff = endTime - now;
 
-      if (now >= endTime) {
+      if (diff <= 0) {
         setIsComplete(true);
         setTimeLeft('Completed');
         onComplete?.();
-        clearInterval(interval);
-      } else {
-        setTimeLeft(formatDistanceToNow(endTime, { addSuffix: true }));
+        return;
       }
-    }, 1000);
+
+      const seconds = Math.floor(diff / 1000);
+      const milliseconds = (diff % 1000).toString().padStart(3, '0');
+
+      setTimeLeft(`${seconds}.${milliseconds}s`);
+    };
+
+    updateTimer(); // Update immediately on mount
+
+    const interval = setInterval(updateTimer, 10); // Update every 10ms
 
     return () => clearInterval(interval);
   }, [timer.end_time, onComplete]);
@@ -36,15 +43,9 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
         <TimerIcon className="w-6 h-6 text-blue-500" />
         <h2 className="text-xl font-semibold">{timer.title}</h2>
       </div>
-      {timer.description && (
-        <p className="text-gray-600 mb-4">{timer.description}</p>
-      )}
-      <div className="text-2xl font-bold text-blue-600">
-        {timeLeft}
-      </div>
-      <div className="mt-2 text-sm text-gray-500">
-        {timer.views} views
-      </div>
+      {timer.description && <p className="text-gray-600 mb-4">{timer.description}</p>}
+      <div className="text-2xl font-bold text-blue-600">{timeLeft}</div>
+      <div className="mt-2 text-sm text-gray-500">{timer.views} views</div>
     </div>
   );
 }
