@@ -24,6 +24,8 @@ function App() {
               <Route path="/create" element={<CreateTimer />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
+              <Route path="/contact-us" element={<About />} />
+              <Route path="/privacy-policy" element={<About />} />
             </Routes>
           </main>
           <Footer />

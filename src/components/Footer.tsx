@@ -21,12 +21,12 @@ export default function Navbar() {
             About
           </Link>
 
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+          <Link to="/privacy-policy" className="flex items-center gap-2 text-xl font-bold text-blue-600">
             
             Privacy Policy
           </Link>
 
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
+          <Link to="/contact-us" className="flex items-center gap-2 text-xl font-bold text-blue-600">
             
             Contact Us
           </Link>
