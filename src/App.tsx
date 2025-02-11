@@ -7,6 +7,8 @@ import TimerPage from './pages/TimerPage';
 import CreateTimer from './pages/CreateTimer';
 import Profile from './pages/Profile';
 import About from './pages/About';
+import Contact from './pages/Contact';
+import Privacy from './pages/privacy';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './context/AuthContext';
@@ -24,8 +26,8 @@ function App() {
               <Route path="/create" element={<CreateTimer />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
-              <Route path="/contact-us" element={<About />} />
-              <Route path="/privacy-policy" element={<About />} />
+              <Route path="/contact-us" element={<Contact />} />
+              <Route path="/privacy-policy" element={<Privacy />} />
             </Routes>
           </main>
           <Footer />
