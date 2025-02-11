@@ -8,7 +8,7 @@ import CreateTimer from './pages/CreateTimer';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Privacy from './pages/privacy';
+import Privacy from './pages/privacypolicy';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import { AuthProvider } from './context/AuthContext';
