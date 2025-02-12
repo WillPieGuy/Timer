@@ -1,7 +1,7 @@
 import React from 'react';
 import { Timer } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { CountdownTimer } from './CountdownTimer';
+import CountdownTimer from './CountdownTimer';
 
 interface Countdown {
   id: string;
@@ -52,7 +52,9 @@ export function AllCountdowns() {
     );
   }
 
-  if (countdowns.length === 0) {
+  const activeCountdowns = countdowns.filter(countdown => new Date(countdown.target_time) > new Date());
+
+  if (activeCountdowns.length === 0) {
     return (
       <div className="text-center p-8">
         <Timer className="mx-auto text-gray-400 mb-4" size={48} />
@@ -69,7 +71,7 @@ export function AllCountdowns() {
         <p className="mt-2 text-gray-600">Browse all shared countdowns from the community</p>
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {countdowns.map((countdown) => (
+        {activeCountdowns.map((countdown) => (
           <CountdownTimer key={countdown.id} {...countdown} />
         ))}
       </div>

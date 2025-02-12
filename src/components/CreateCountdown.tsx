@@ -7,6 +7,8 @@ export function CreateCountdown() {
   const [title, setTitle] = React.useState('');
   const [targetDate, setTargetDate] = React.useState('');
   const [targetTime, setTargetTime] = React.useState('');
+  const [hours, setHours] = React.useState('');
+  const [minutes, setMinutes] = React.useState('');
   const [timezone, setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const fetchCountdowns = useStore((state) => state.fetchCountdowns);
   const user = useStore((state) => state.user);
@@ -16,8 +18,15 @@ export function CreateCountdown() {
 
     if (!user) return;
 
-    const targetDateTime = `${targetDate}T${targetTime}`;
-    
+    let targetDateTime = '';
+    if (targetDate && targetTime) {
+      targetDateTime = `${targetDate}T${targetTime}`;
+    } else {
+      const now = new Date();
+      const target = new Date(now.getTime() + (parseInt(hours) * 60 + parseInt(minutes)) * 60000);
+      targetDateTime = target.toISOString();
+    }
+
     const { error } = await supabase
       .from('countdowns')
       .insert({
@@ -32,6 +41,8 @@ export function CreateCountdown() {
       setTitle('');
       setTargetDate('');
       setTargetTime('');
+      setHours('');
+      setMinutes('');
       fetchCountdowns();
     } else {
       console.error('Error creating countdown:', error);
@@ -71,7 +82,7 @@ export function CreateCountdown() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-              Date
+              End Date
             </label>
             <input
               type="date"
@@ -79,13 +90,12 @@ export function CreateCountdown() {
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              required
             />
           </div>
 
           <div>
             <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-              Time
+              End Time
             </label>
             <input
               type="time"
@@ -93,7 +103,34 @@ export function CreateCountdown() {
               value={targetTime}
               onChange={(e) => setTargetTime(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              required
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="hours" className="block text-sm font-medium text-gray-700">
+              Hours
+            </label>
+            <input
+              type="number"
+              id="hours"
+              value={hours}
+              onChange={(e) => setHours(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="minutes" className="block text-sm font-medium text-gray-700">
+              Minutes
+            </label>
+            <input
+              type="number"
+              id="minutes"
+              value={minutes}
+              onChange={(e) => setMinutes(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
         </div>
