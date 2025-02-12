@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Timer as TimerIcon } from 'lucide-react';
 import type { Timer } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 
 type Props = {
   timer: Timer;
@@ -10,6 +11,8 @@ type Props = {
 export default function CountdownTimer({ timer, onComplete }: Props) {
   const [timeLeft, setTimeLeft] = useState('');
   const [isComplete, setIsComplete] = useState(false);
+  const { user } = useAuth();
+  const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
     const updateTimer = () => {
@@ -28,7 +31,7 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      const milliseconds = (diff % 1000).toString().padStart(1, '0');
+      const milliseconds = Math.floor((diff % 1000) / 100); // Ensure only one digit
 
       let formattedTime = '';
       if (days > 0) formattedTime += `${days}d `;
@@ -39,12 +42,22 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
       setTimeLeft(formattedTime.trim());
     };
 
-    updateTimer(); // Initial update
+    if (isRunning) {
+      updateTimer(); // Initial update
 
-    const interval = setInterval(updateTimer, 10); // Update every 10ms
+      const interval = setInterval(updateTimer, 100); // Update every 100ms
 
-    return () => clearInterval(interval);
-  }, [timer.end_time, onComplete]);
+      return () => clearInterval(interval);
+    }
+  }, [timer.end_time, onComplete, isRunning]);
+
+  const handleStart = () => {
+    setIsRunning(true);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+  };
 
   return (
     <div className={`p-6 rounded-lg shadow-md ${isComplete ? 'bg-gray-100' : 'bg-white'}`}>
@@ -55,6 +68,22 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
       {timer.description && <p className="text-gray-600 mb-4">{timer.description}</p>}
       <div className="text-2xl font-bold text-blue-600">{timeLeft}</div>
       <div className="mt-2 text-sm text-gray-500">{timer.views} views</div>
+      {user && user.id === timer.created_by && (
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={handleStart}
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+          >
+            Start
+          </button>
+          <button
+            onClick={handleStop}
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+          >
+            Stop
+          </button>
+        </div>
+      )}
     </div>
   );
 }
