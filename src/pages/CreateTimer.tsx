@@ -51,11 +51,39 @@ export default function CreateTimer() {
     }
   };
 
+  const setQuickTimer = (minutes: number) => {
+    const now = new Date();
+    const endDateTime = new Date(now.getTime() + minutes * 60000);
+    setEndDate(endDateTime.toISOString().split('T')[0]);
+    setEndTime(endDateTime.toTimeString().split(' ')[0].substring(0, 5));
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-8">
         <Timer className="w-8 h-8 text-blue-600" />
         <h1 className="text-3xl font-bold">Create New Timer</h1>
+      </div>
+
+      <div className="flex gap-4 mb-4">
+        <button
+          onClick={() => setQuickTimer(2)}
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          2 Minutes
+        </button>
+        <button
+          onClick={() => setQuickTimer(5)}
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          5 Minutes
+        </button>
+        <button
+          onClick={() => setQuickTimer(10)}
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          10 Minutes
+        </button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
