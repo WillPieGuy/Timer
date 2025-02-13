@@ -52,7 +52,7 @@ export default function Home() {
         )}
       </div>
 
-      {showQuickTimer && <QuickTimer />} {/* Conditionally render QuickTimer */}
+      {showQuickTimer && <QuickTimer minutes={5} />} {/* Pass a default value for minutes */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {timers.map((timer) => (
