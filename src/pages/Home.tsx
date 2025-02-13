@@ -14,13 +14,12 @@ export default function Home() {
       const { data, error } = await supabase
         .from('timers')
         .select('*')
+        .gt('end_time', new Date().toISOString()) // Filter timers with end_time in the future
         .order('views', { ascending: false })
         .limit(10);
 
       if (!error && data) {
-        // Filter out completed timers
-        const activeTimers = data.filter(timer => !timer.isCompleted);
-        setTimers(activeTimers);
+        setTimers(data);
       }
     };
 
