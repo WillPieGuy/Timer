@@ -1,130 +1,194 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Timer } from 'lucide-react';
+import React from 'react';
+import { Clock, Plus } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { useStore } from '../lib/store';
+import QuickTimer from './QuickTimer';
 
-export default function CreateTimer() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [error, setError] = useState('');
-  const { user } = useAuth();
-  const navigate = useNavigate();
+export function CreateCountdown() {
+  const [title, setTitle] = React.useState('');
+  const [targetDate, setTargetDate] = React.useState('');
+  const [targetTime, setTargetTime] = React.useState('');
+  const [hours, setHours] = React.useState('');
+  const [minutes, setMinutes] = React.useState('');
+  const [timezone, setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [quickTimerMinutes, setQuickTimerMinutes] = React.useState<number | null>(null);
+  const fetchCountdowns = useStore((state) => state.fetchCountdowns);
+  const user = useStore((state) => state.user);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
-    if (!user) {
-      setError('You must be signed in to create a timer');
-      return;
+    if (!user) return;
+
+    let targetDateTime = '';
+    if (targetDate && targetTime) {
+      targetDateTime = `${targetDate}T${targetTime}`;
+    } else {
+      const now = new Date();
+      const target = new Date(now.getTime() + (parseInt(hours) * 60 + parseInt(minutes)) * 60000);
+      targetDateTime = target.toISOString();
     }
 
-    const endDateTime = new Date(`${endDate}T${endTime}`);
-    if (endDateTime <= new Date()) {
-      setError('End time must be in the future');
-      return;
-    }
+    const { error } = await supabase
+      .from('countdowns')
+      .insert({
+        id: title, // Use the title as the ID
+        title,
+        target_time: targetDateTime,
+        timezone,
+        user_id: user.id // Add the user_id here
+      });
 
-    try {
-      const { data, error: insertError } = await supabase
-        .from('timers')
-        .insert([
-          {
-            title,
-            description,
-            end_time: endDateTime.toISOString(),
-            created_by: user.id,
-          },
-        ])
-        .select()
-        .single();
-
-      if (insertError) throw insertError;
-      if (data) {
-        navigate(`/timer/${data.id}`);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create timer');
+    if (!error) {
+      setTitle('');
+      setTargetDate('');
+      setTargetTime('');
+      setHours('');
+      setMinutes('');
+      fetchCountdowns();
+    } else {
+      console.error('Error creating countdown:', error);
     }
   };
 
+  const setQuickTimer = (minutes: number) => {
+    setQuickTimerMinutes(minutes);
+  };
+
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-3 mb-8">
-        <Timer className="w-8 h-8 text-blue-600" />
-        <h1 className="text-3xl font-bold">Create New Timer</h1>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          />
+    <div>
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex items-center gap-2 mb-6">
+          <Clock className="text-indigo-600" size={24} />
+          <h2 className="text-2xl font-bold text-gray-800">Create New Countdown</h2>
         </div>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Description (optional)
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-4">
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
-              End Date
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              Title
             </label>
             <input
-              type="date"
-              id="endDate"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               required
             />
           </div>
 
-          <div>
-            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
-              End Time
-            </label>
-            <input
-              type="time"
-              id="endTime"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
+              <input
+                type="date"
+                id="date"
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                End Time
+              </label>
+              <input
+                type="time"
+                id="time"
+                value={targetTime}
+                onChange={(e) => setTargetTime(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="hours" className="block text-sm font-medium text-gray-700">
+                Hours
+              </label>
+              <input
+                type="number"
+                id="hours"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="minutes" className="block text-sm font-medium text-gray-700">
+                Minutes
+              </label>
+              <input
+                type="number"
+                id="minutes"
+                value={minutes}
+                onChange={(e) => setMinutes(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="timezone" className="block text-sm font-medium text-gray-700">
+              Timezone
+            </label>
+            <select
+              id="timezone"
+              value={timezone}
+              onChange={(e) => setTimezone(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+              {Intl.supportedValuesOf('timeZone').map((tz) => (
+                <option key={tz} value={tz}>
+                  {tz}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setQuickTimer(5)}
+              className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            >
+              5 Minutes
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuickTimer(10)}
+              className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            >
+              10 Minutes
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuickTimer(15)}
+              className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            >
+              15 Minutes
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            <Plus size={20} />
+            Create Countdown
+          </button>
         </div>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-        >
-          Create Timer
-        </button>
       </form>
+
+      {quickTimerMinutes !== null && (
+        <QuickTimer minutes={quickTimerMinutes} onComplete={() => setQuickTimerMinutes(null)} />
+      )}
     </div>
   );
 }
