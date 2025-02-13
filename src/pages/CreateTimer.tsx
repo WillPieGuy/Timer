@@ -2,7 +2,7 @@ import React from 'react';
 import { Clock, Plus } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../lib/store';
-import QuickTimer from './QuickTimer';
+import QuickTimer from '../components/QuickTimer';
 
 export function CreateCountdown() {
   const [title, setTitle] = React.useState('');
