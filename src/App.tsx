@@ -8,6 +8,7 @@ import CreateTimer from './pages/CreateTimer';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import ForgotPassword from './pages/ForgotPassword';
 import Privacy from './pages/privacypolicy';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
@@ -28,6 +29,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact-us" element={<Contact />} />
               <Route path="/privacy-policy" element={<Privacy />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
             </Routes>
           </main>
           <Footer />
