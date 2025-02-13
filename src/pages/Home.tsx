@@ -18,7 +18,9 @@ export default function Home() {
         .limit(10);
 
       if (!error && data) {
-        setTimers(data);
+        // Filter out completed timers
+        const activeTimers = data.filter(timer => !timer.isCompleted);
+        setTimers(activeTimers);
       }
     };
 
