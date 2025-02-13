@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import TimerPage from './pages/TimerPage';
 import CreateTimer from './pages/CreateTimer';
 import Profile from './pages/Profile';
+import CreateQuickTimer from './pages/CreateQuickTimer';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import ForgotPassword from './pages/ForgotPassword';
@@ -30,6 +31,7 @@ function App() {
               <Route path="/contact-us" element={<Contact />} />
               <Route path="/privacy-policy" element={<Privacy />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/create-quick-timer" element={<CreateQuickTimer />} />
             </Routes>
           </main>
           <Footer />

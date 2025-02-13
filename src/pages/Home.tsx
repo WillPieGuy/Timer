@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { supabase, type Timer } from '../lib/supabase';
 import CountdownTimer from '../components/CountdownTimer';
@@ -9,7 +9,7 @@ import QuickTimer from '../components/QuickTimer'; // Import QuickTimer componen
 export default function Home() {
   const [timers, setTimers] = useState<Timer[]>([]);
   const { user } = useAuth();
-  const [showQuickTimer, setShowQuickTimer] = useState(false); // State to manage QuickTimer visibility
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     const fetchTimers = async () => {
@@ -42,7 +42,7 @@ export default function Home() {
               Create Timer
             </Link>
             <button
-              onClick={() => setShowQuickTimer(!showQuickTimer)}
+              onClick={() => navigate('/create-quick-timer')} // Navigate to the Create Quick Timer page
               className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -51,8 +51,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {showQuickTimer && <QuickTimer minutes={5} />} {/* Pass a default value for minutes */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {timers.map((timer) => (
