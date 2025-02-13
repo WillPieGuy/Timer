@@ -3,7 +3,6 @@ import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-
 export default function AuthModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -12,6 +11,7 @@ export default function AuthModal() {
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const { signIn, signUp } = useAuth();
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
@@ -117,7 +117,7 @@ export default function AuthModal() {
         <p className="mt-4 text-center text-sm text-gray-600">
           {isSignUp ? 'Forgot your password?' : "Forgot your password?"}{' '}
           <button
-             onClick={() => navigate("/forgot-password")} // Use navigate function
+            onClick={() => navigate("/forgot-password")} // Use navigate function
             className="text-blue-600 hover:text-blue-700 font-semibold"
           >
             {isSignUp ? 'Reset' : 'Reset'}
