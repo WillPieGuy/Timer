@@ -17,7 +17,7 @@ const QuickTimer: React.FC<QuickTimerProps> = ({ minutes }) => {
       return () => clearInterval(timerId);
     } else {
       setShowConfetti(true);
-      const audio = new Audio('/path/to/chime.mp3');
+      const audio = new Audio('../components/chime.mp3');
       audio.play();
     }
   }, [timeLeft]);
