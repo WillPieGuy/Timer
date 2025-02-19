@@ -1,40 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Confetti from 'react-confetti';
 
-type QuickTimerProps = {
+interface QuickTimerProps {
   minutes: number;
-  onComplete?: () => void;
-};
+}
 
-export default function QuickTimer({ minutes, onComplete }: QuickTimerProps) {
+const QuickTimer: React.FC<QuickTimerProps> = ({ minutes }) => {
   const [timeLeft, setTimeLeft] = useState(minutes * 60);
-  const [isComplete, setIsComplete] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setIsComplete(true);
-          onComplete?.();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [onComplete]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
+    if (timeLeft > 0) {
+      const timerId = setInterval(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+      return () => clearInterval(timerId);
+    } else {
+      setShowConfetti(true);
+      const audio = new Audio('/path/to/chime.mp3');
+      audio.play();
+    }
+  }, [timeLeft]);
 
   return (
-    <div className={`p-6 rounded-lg shadow-md ${isComplete ? 'bg-gray-100' : 'bg-white'}`}>
-      <div className="text-2xl font-bold text-blue-600">{formatTime(timeLeft)}</div>
-      {isComplete && <div className="text-green-600">Time's up!</div>}
+    <div>
+      <h2 className="text-2xl font-bold">{Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</h2>
+      {showConfetti && <Confetti />}
     </div>
   );
-}
+};
+
+export default QuickTimer;
