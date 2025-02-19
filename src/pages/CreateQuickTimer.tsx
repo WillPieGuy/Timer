@@ -4,15 +4,17 @@ import QuickTimer from '../components/QuickTimer'; // Import QuickTimer componen
 
 export default function CreateQuickTimer() { // Ensure the component name matches the file name
   const [quickTimerMinutes, setQuickTimerMinutes] = useState<number | null>(null); // State to manage QuickTimer duration
-  const [customMinutes, setCustomMinutes] = useState<number | ''>(''); // State to manage custom input
+  const [customMinutes, setCustomMinutes] = useState<number | ''>(''); // State to manage custom input for minutes
+  const [customSeconds, setCustomSeconds] = useState<number | ''>(''); // State to manage custom input for seconds
 
   const setQuickTimer = (minutes: number) => {
     setQuickTimerMinutes(minutes);
   };
 
   const handleCustomTimeSubmit = () => {
-    if (customMinutes > 0) {
-      setQuickTimer(customMinutes);
+    const totalSeconds = (Number(customMinutes) * 60) + Number(customSeconds);
+    if (totalSeconds > 0) {
+      setQuickTimer(totalSeconds / 60);
     }
   };
 
@@ -50,7 +52,14 @@ export default function CreateQuickTimer() { // Ensure the component name matche
           value={customMinutes}
           onChange={(e) => setCustomMinutes(Number(e.target.value))}
           className="w-full px-4 py-2 border rounded-lg"
-          placeholder="Enter custom minutes"
+          placeholder="Minutes"
+        />
+        <input
+          type="number"
+          value={customSeconds}
+          onChange={(e) => setCustomSeconds(Number(e.target.value))}
+          className="w-full px-4 py-2 border rounded-lg"
+          placeholder="Seconds"
         />
         <button
           onClick={handleCustomTimeSubmit}

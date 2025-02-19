@@ -33,13 +33,21 @@ export default function Home() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Popular Countdowns</h1>
         <div className="flex gap-4">
-          {user && (
+          {user ? (
             <Link
               to="/create"
               className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
               <Plus className="w-5 h-5" />
               Create Timer
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              Login to Create Timer
             </Link>
           )}
           <button
