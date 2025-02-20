@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
+import chimeSound from '../components/chime.mp3'; // Import the audio file
 
 interface QuickTimerProps {
   minutes: number;
@@ -17,7 +18,7 @@ const QuickTimer: React.FC<QuickTimerProps> = ({ minutes }) => {
       return () => clearInterval(timerId);
     } else {
       setShowConfetti(true);
-      const audio = new Audio('../components/chime.mp3');
+      const audio = new Audio(chimeSound);
       audio.play();
     }
   }, [timeLeft]);

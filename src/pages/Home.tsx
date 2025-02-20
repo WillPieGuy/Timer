@@ -44,7 +44,7 @@ export default function Home() {
           ) : (
             <Link
             onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
-              to="/login"
+              to="/"
               className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
               <Plus className="w-5 h-5" />

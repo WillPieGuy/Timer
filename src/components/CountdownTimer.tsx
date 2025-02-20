@@ -68,22 +68,7 @@ export default function CountdownTimer({ timer, onComplete }: Props) {
       {timer.description && <p className="text-gray-600 mb-4">{timer.description}</p>}
       <div className="text-2xl font-bold text-blue-600">{timeLeft}</div>
       <div className="mt-2 text-sm text-gray-500">{timer.views} views</div>
-      {user && user.id === timer.created_by && (
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={handleStart}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
-          >
-            Start
-          </button>
-          <button
-            onClick={handleStop}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
-          >
-            Stop
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }
