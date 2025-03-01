@@ -27,6 +27,12 @@ export default function CreateQuickTimer() { // Ensure the component name matche
 
       <div className="flex gap-4 mb-4">
         <button
+          onClick={() => setQuickTimer(1)}
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          1 Minute
+        </button>
+        <button
           onClick={() => setQuickTimer(2)}
           className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
         >
@@ -44,6 +50,12 @@ export default function CreateQuickTimer() { // Ensure the component name matche
         >
           10 Minutes
         </button>
+        <button
+          onClick={() => setQuickTimer(20)}
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          20 Minutes
+        </button>
       </div>
 
       <div className="flex gap-4 mb-4">
@@ -51,19 +63,19 @@ export default function CreateQuickTimer() { // Ensure the component name matche
           type="number"
           value={customMinutes}
           onChange={(e) => setCustomMinutes(Number(e.target.value))}
-          className="w-full px-4 py-2 border rounded-lg"
+          className="w-full px-4 py-2 border rounded-lg h-10" // Match the height of the buttons
           placeholder="Minutes"
         />
         <input
           type="number"
           value={customSeconds}
           onChange={(e) => setCustomSeconds(Number(e.target.value))}
-          className="w-full px-4 py-2 border rounded-lg"
+          className="w-full px-4 py-2 border rounded-lg h-10" // Match the height of the buttons
           placeholder="Seconds"
         />
         <button
           onClick={handleCustomTimeSubmit}
-          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+          className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors h-10" // Match the height of the buttons
         >
           Set Custom Timer
         </button>
