@@ -5,7 +5,7 @@ import { supabase, type Timer, type Profile } from '../lib/supabase';
 import CountdownTimer from '../components/CountdownTimer';
 
 export default function TimerPage() {
-  const { id } = useParams<{ id: string }>();
+  const { title } = useParams<{ title: string }>();
   const [timer, setTimer] = useState<Timer | null>(null);
   const [creator, setCreator] = useState<Profile | null>(null);
   const [error, setError] = useState('');
@@ -13,19 +13,28 @@ export default function TimerPage() {
 
   useEffect(() => {
     const fetchTimer = async () => {
-      if (!id) return;
+      if (!title) return;
 
       try {
-        // Increment views
-        const { data: updatedTimer, error: updateError } = await supabase.rpc('increment_timer_views', {
-          timer_id: id
-        });
+        // Fetch timer by title
+        const { data: fetchedTimer, error: fetchError } = await supabase
+          .from('timers')
+          .select('*')
+          .eq('title', title)
+          .single();
 
-        if (updateError) throw updateError;
+        if (fetchError) throw fetchError;
 
-        if (updatedTimer) {
+        if (fetchedTimer) {
+          // Increment views
+          const { data: updatedTimer, error: updateError } = await supabase.rpc('increment_timer_views', {
+            timer_id: fetchedTimer.id
+          });
+
+          if (updateError) throw updateError;
+
           setTimer(updatedTimer);
-          
+
           // Fetch creator profile
           const { data: creatorData, error: creatorError } = await supabase
             .from('profiles')
@@ -42,7 +51,7 @@ export default function TimerPage() {
     };
 
     fetchTimer();
-  }, [id]);
+  }, [title]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);

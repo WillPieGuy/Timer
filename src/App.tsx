@@ -24,7 +24,7 @@ function App() {
           <main className="container mx-auto px-4 py-8">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/timer/:id" element={<TimerPage />} />
+              <Route path="/timer/:title" element={<TimerPage />} />
               <Route path="/create" element={<CreateTimer />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
