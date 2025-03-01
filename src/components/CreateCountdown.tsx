@@ -3,6 +3,7 @@ import { Clock, Plus } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../lib/store';
 import QuickTimer from './QuickTimer';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateCountdown() {
   const [title, setTitle] = React.useState('');
@@ -14,6 +15,7 @@ export function CreateCountdown() {
   const [quickTimerMinutes, setQuickTimerMinutes] = React.useState<number | null>(null);
   const fetchCountdowns = useStore((state) => state.fetchCountdowns);
   const user = useStore((state) => state.user);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ export function CreateCountdown() {
       targetDateTime = target.toISOString();
     }
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('countdowns')
       .insert({
         id: title, // Use the title as the ID
@@ -37,15 +39,19 @@ export function CreateCountdown() {
         target_time: targetDateTime,
         timezone,
         user_id: user.id // Add the user_id here
-      });
+      })
+      .select('*')
+      .single();
 
-    if (!error) {
+    if (!error && data) {
       setTitle('');
       setTargetDate('');
       setTargetTime('');
       setHours('');
       setMinutes('');
       fetchCountdowns();
+      // Navigate to the new timer URL
+      navigate(`/timer/${data.title}/${data.target_time}`);
     } else {
       console.error('Error creating countdown:', error);
     }
