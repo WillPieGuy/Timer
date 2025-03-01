@@ -18,6 +18,12 @@ export default function CreateQuickTimer() { // Ensure the component name matche
     }
   };
 
+  const handleReset = () => {
+    setQuickTimerMinutes(null);
+    setCustomMinutes('');
+    setCustomSeconds('');
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-8">
@@ -78,6 +84,12 @@ export default function CreateQuickTimer() { // Ensure the component name matche
           className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors h-10" // Match the height of the buttons
         >
           Set Custom Timer
+        </button>
+        <button
+          onClick={handleReset}
+          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors h-10" // Match the height of the buttons
+        >
+          Reset
         </button>
       </div>
 

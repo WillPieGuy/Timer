@@ -25,7 +25,11 @@ const QuickTimer: React.FC<QuickTimerProps> = ({ minutes }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold">{Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</h2>
+      <h2
+        className={`text-6xl font-bold ${timeLeft <= 5 ? 'text-red-600' : 'text-black'}`}
+      >
+        {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}
+      </h2>
       {showConfetti && <Confetti />}
     </div>
   );
