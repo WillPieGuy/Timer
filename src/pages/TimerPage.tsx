@@ -5,7 +5,7 @@ import { supabase, type Timer, type Profile } from '../lib/supabase';
 import CountdownTimer from '../components/CountdownTimer';
 
 export default function TimerPage() {
-  const { title } = useParams<{ title: string }>();
+  const { title, endTime } = useParams<{ title: string; endTime: string }>();
   const [timer, setTimer] = useState<Timer | null>(null);
   const [creator, setCreator] = useState<Profile | null>(null);
   const [error, setError] = useState('');
@@ -13,19 +13,22 @@ export default function TimerPage() {
 
   useEffect(() => {
     const fetchTimer = async () => {
-      if (!title) return;
+      if (!title || !endTime) return;
 
       try {
-        // Fetch timer by title
+        console.log(`Fetching timer with title: ${title} and end time: ${endTime}`);
+        // Fetch timer by title and end time
         const { data: fetchedTimer, error: fetchError } = await supabase
           .from('timers')
           .select('*')
           .eq('title', title)
+          .eq('end_time', endTime)
           .single();
 
         if (fetchError) throw fetchError;
 
         if (fetchedTimer) {
+          console.log('Fetched timer:', fetchedTimer);
           // Increment views
           const { data: updatedTimer, error: updateError } = await supabase.rpc('increment_timer_views', {
             timer_id: fetchedTimer.id
@@ -44,14 +47,17 @@ export default function TimerPage() {
 
           if (creatorError) throw creatorError;
           setCreator(creatorData);
+        } else {
+          setError('Timer not found');
         }
       } catch (err) {
+        console.error('Error fetching timer:', err);
         setError(err instanceof Error ? err.message : 'Failed to load timer');
       }
     };
 
     fetchTimer();
-  }, [title]);
+  }, [title, endTime]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
