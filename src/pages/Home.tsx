@@ -43,7 +43,7 @@ export default function Home() {
             </Link>
           ) : (
             <Link
-            onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
               to="/"
               className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
@@ -63,7 +63,7 @@ export default function Home() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {timers.map((timer) => (
-          <Link key={timer.id} to={`/timer/${timer.id}`}>
+          <Link key={timer.id} to={`/timer/${timer.title}`}>
             <CountdownTimer timer={timer} />
           </Link>
         ))}

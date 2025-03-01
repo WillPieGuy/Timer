@@ -83,7 +83,7 @@ export default function CreateQuickTimer() { // Ensure the component name matche
           onClick={handleCustomTimeSubmit}
           className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors h-10" // Match the height of the buttons
         >
-          Set Custom Timer
+          Set
         </button>
         <button
           onClick={handleReset}
